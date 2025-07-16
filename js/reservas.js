@@ -50,4 +50,25 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    // Animación de entrada de las tarjetas de clase con GSAP
+    gsap.from(".clase-card-reserva", {
+        opacity: 0,
+        y: 100, // Empieza 100px más abajo
+        scale: 0.8, // Empieza un poco más pequeña
+        rotationZ: -10, // Ligera rotación inicial
+        duration: 1.2, // Duración más larga
+        stagger: 0.2, // Retraso entre la animación de cada tarjeta
+        ease: "back.out(1.7)" // Efecto de rebote
+    });
+
+    // Nueva animación para el contenedor principal (reservas-container)
+    gsap.from(".reservas-container", {
+        opacity: 0,
+        y: 200, // Empieza 200px más abajo para un rebote más pronunciado
+        scale: 0.9, // Empieza un 10% más pequeña
+        duration: 3.5, // Duración más larga para que el rebote sea visible
+        delay: 0.3, // Pequeño retraso
+        ease: "bounce.out" // Efecto de rebote
+    });
 });

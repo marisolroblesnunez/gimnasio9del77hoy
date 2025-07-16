@@ -18,8 +18,8 @@ $claseController = new ClaseController();
 $datos = $claseController->mostrarClases();
 $clases = $datos['clases']; // Array con todas las clases
 
-// Obtener el nombre del usuario de la sesión para el mensaje de bienvenida.
-$nombre_usuario = $_SESSION['usuario']['nombre'] ?? 'Usuario';
+// Obtener el email del usuario de la sesión para el mensaje de bienvenida.
+$email_usuario = $_SESSION['usuario']['email'] ?? 'Usuario';
 
 ?>
 <!DOCTYPE html>
@@ -74,12 +74,12 @@ $nombre_usuario = $_SESSION['usuario']['nombre'] ?? 'Usuario';
         }
         .clases-carrusel {
             display: flex;
-            overflow-x: auto;
-            padding-bottom: 20px;
-            gap: 20px;
+            overflow-x: auto; /* Habilita el scroll horizontal */
+            padding-bottom: 20px; /* Espacio para la barra de scroll */
+            gap: 20px; /* Espacio entre las tarjetas */
         }
         .clase-card-reserva {
-            flex: 0 0 300px;
+            flex: 0 0 300px; /* No se encoge, no crece, base de 300px */
             background-color: rgba(255, 255, 255, 0.05); /* Casi transparente */
             border: 1px solid #8A2BE2;
             border-radius: 10px;
@@ -119,7 +119,7 @@ $nombre_usuario = $_SESSION['usuario']['nombre'] ?? 'Usuario';
 
     <div class="reservas-container">
         <div class="welcome-header">
-            <h1>Forja tu mejor versión, <?php echo htmlspecialchars($nombre_usuario); ?>.</h1>
+            <h1>Cada entrenamiento cuenta. ¡Sigue así, <?php echo htmlspecialchars($email_usuario); ?>!</h1>
             <a href="logout.php" class="logout-btn">Cerrar Sesión</a>
         </div>
         
@@ -151,6 +151,7 @@ $nombre_usuario = $_SESSION['usuario']['nombre'] ?? 'Usuario';
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="js/reservas.js"></script>
 </body>
 </html>

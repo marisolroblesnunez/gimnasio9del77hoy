@@ -43,7 +43,7 @@ $email_usuario = $_SESSION['usuario']['email'] ?? 'Usuario';
             max-width: 90%;
             margin: 2rem auto;
             padding: 2rem;
-            background-color: rgba(0, 0, 0, 0.8); /* Fondo más oscuro */
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo más oscuro */
             border-radius: 15px;
             text-align: center;
             border: 1px solid #6a0dad; /* Borde morado */
@@ -113,17 +113,34 @@ $email_usuario = $_SESSION['usuario']['email'] ?? 'Usuario';
             color: #aaa;
             cursor: not-allowed;
         }
+        #confetti-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Permite hacer clic a través del contenedor */
+            overflow: hidden;
+            z-index: 9999; /* Asegura que esté por encima de todo */
+        }
+        .confetti-particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #fff; /* Color por defecto, se cambiará con JS */
+            border-radius: 50%; /* Forma circular por defecto, se puede cambiar */
+        }
     </style>
 </head>
 <body class="reservas-page">
 
     <div class="reservas-container">
         <div class="welcome-header">
-            <h1>Cada entrenamiento cuenta. ¡Sigue así, <?php echo htmlspecialchars($email_usuario); ?>!</h1>
+            <h1>¡Bienvenido, Gracias por confiar en nosotros! <br>Cada entrenamiento cuenta. ¡Sigue así! <?php echo htmlspecialchars($email_usuario); ?>!</h1>
             <a href="logout.php" class="logout-btn">Cerrar Sesión</a>
         </div>
         
-        <h2>No pierdas la oportunidad. ¡Apúntate ahora!</h2>
+        <h2>No pierdas la oportunidad. ¡Apúntate YA!</h2>
 
         <div class="clases-carrusel">
             <?php if (empty($clases)): ?>
@@ -149,6 +166,7 @@ $email_usuario = $_SESSION['usuario']['email'] ?? 'Usuario';
             endif; 
             ?>
         </div>
+        <div id="confetti-container"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

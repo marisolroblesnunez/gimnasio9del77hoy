@@ -62,6 +62,37 @@ document.addEventListener('DOMContentLoaded', function() {
         ease: "back.out(1.7)" // Efecto de rebote
     });
 
+    // Función para crear y animar el confeti
+    function createConfetti() {
+        const confettiContainer = document.getElementById('confetti-container');
+        const colors = ["#9370DB", "#8A2BE2", "#6a0dad", "#4B0082", "#FFFFFF", "#FFD700"]; // Tonos morados, blanco, dorado
+
+        for (let i = 0; i < 50; i++) { // Generar 50 partículas de confeti
+            const particle = document.createElement('div');
+            particle.classList.add('confetti-particle');
+            particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Posición inicial aleatoria dentro del contenedor principal
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+            particle.style.left = `${startX}px`;
+            particle.style.top = `${startY}px`;
+
+            confettiContainer.appendChild(particle);
+
+            gsap.to(particle, {
+                x: Math.random() * 400 - 200, // Movimiento horizontal aleatorio
+                y: Math.random() * 400 - 200, // Movimiento vertical aleatorio
+                rotation: Math.random() * 360, // Rotación aleatoria
+                scale: Math.random() * 0.5 + 0.5, // Tamaño aleatorio
+                opacity: 0,
+                duration: Math.random() * 2 + 1, // Duración aleatoria
+                ease: "power1.out",
+                onComplete: () => particle.remove() // Eliminar la partícula al finalizar la animación
+            });
+        }
+    }
+
     // Nueva animación para el contenedor principal (reservas-container)
     gsap.from(".reservas-container", {
         opacity: 0,
@@ -69,6 +100,9 @@ document.addEventListener('DOMContentLoaded', function() {
         scale: 0.9, // Empieza un 10% más pequeña
         duration: 3.5, // Duración más larga para que el rebote sea visible
         delay: 0.3, // Pequeño retraso
-        ease: "bounce.out" // Efecto de rebote
+        ease: "bounce.out", // Efecto de rebote
+        onComplete: createConfetti // Disparar el confeti al finalizar la animación del contenedor
     });
+
+    // Eliminada la animación del h1 que no se usará con el confeti
 });

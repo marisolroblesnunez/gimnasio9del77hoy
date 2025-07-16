@@ -41,9 +41,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['login'])){
     if($resultado['success']){
         $_SESSION['usuario'] = $resultado['usuario'];
         $_SESSION['user_id'] = $resultado['usuario']['id']; // Añadido: Guardar el ID del usuario
-        $ruta = '../admin/index.php';
+        $ruta = '../reservas.php';
     }else{
-        $ruta = '../admin/login.php';
+        $ruta = '../login.php';
     }
     redirigirConMensaje($ruta, $resultado['success'], $resultado['mensaje']);
 }

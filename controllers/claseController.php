@@ -14,20 +14,25 @@ class ClaseController {
     }
 
     public function mostrarClases() {
+        // Inicia la sesión si no está iniciada para poder acceder a $_SESSION
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        $id_usuario = $_SESSION['user_id'] ?? null;
         $clases = [];
         $dia_seleccionado = isset($_GET['dia']) ? $_GET['dia'] : null;
 
         if ($dia_seleccionado) {
-            $clases = $this->claseDB->getClasesByDia($dia_seleccionado);
+            // Pasamos el id_usuario al método
+            $clases = $this->claseDB->getClasesByDia($dia_seleccionado, $id_usuario);
         } else {
-            $clases = $this->claseDB->getAllClasesWithDetails();
+            // Pasamos el id_usuario al método
+            $clases = $this->claseDB->getAllClasesWithDetails($id_usuario);
         }
 
         $entrenadores = $this->entrenadorDB->getAll();
 
-        // Puedes pasar $clases y $entrenadores a tu vista (clases.php)
-        // Por ejemplo, incluyendo la vista aquí o retornando los datos.
-        // Para este ejemplo, simplemente los haremos disponibles para la inclusión de la vista.
         return ['clases' => $clases, 'entrenadores' => $entrenadores, 'dia_seleccionado' => $dia_seleccionado];
     }
 

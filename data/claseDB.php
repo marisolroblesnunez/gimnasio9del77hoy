@@ -137,35 +137,61 @@ class claseDB {
         return false;
     }
 
-    public function getAllClasesWithDetails() {
-        $sql = "SELECT c.*, e.nombre AS nombre_entrenador, COUNT(ic.id_clase) AS inscritos_actuales
+    public function getAllClasesWithDetails($id_usuario = null) {
+        // El CASE se asegura de que si no hay id_usuario, el campo siempre sea 0.
+        $sql = "SELECT 
+                    c.*, 
+                    e.nombre AS nombre_entrenador, 
+                    COUNT(ic.id_clase) AS inscritos_actuales,
+                    CASE 
+                        WHEN ? IS NOT NULL THEN EXISTS(SELECT 1 FROM inscripciones_clases WHERE id_clase = c.id AND id_usuario = ?)
+                        ELSE 0 
+                    END AS usuario_inscrito
                 FROM clases c
                 LEFT JOIN entrenadores e ON c.id_entrenador = e.id
                 LEFT JOIN inscripciones_clases ic ON c.id = ic.id_clase
                 GROUP BY c.id
-                ORDER BY c.dia_semana, c.hora";
-        $resultado = $this->db->query($sql);
+                ORDER BY FIELD(c.dia_semana, 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'), c.hora";
+        
+        $stmt = $this->db->prepare($sql);
         $clases = [];
-        if ($resultado && $resultado->num_rows > 0) {
-            while ($row = $resultado->fetch_assoc()) {
+
+        if ($stmt) {
+            // Se bindea el id_usuario dos veces, una para el CASE y otra para el EXISTS.
+            $stmt->bind_param("ii", $id_usuario, $id_usuario);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            while ($row = $result->fetch_assoc()) {
                 $clases[] = $row;
             }
+            $stmt->close();
         }
+        
         return $clases;
     }
 
-    public function getClasesByDia($dia_semana) {
-        $sql = "SELECT c.*, e.nombre AS nombre_entrenador, COUNT(ic.id_clase) AS inscritos_actuales
+    public function getClasesByDia($dia_semana, $id_usuario = null) {
+        $sql = "SELECT 
+                    c.*, 
+                    e.nombre AS nombre_entrenador, 
+                    COUNT(ic.id_clase) AS inscritos_actuales,
+                    CASE 
+                        WHEN ? IS NOT NULL THEN EXISTS(SELECT 1 FROM inscripciones_clases WHERE id_clase = c.id AND id_usuario = ?)
+                        ELSE 0 
+                    END AS usuario_inscrito
                 FROM clases c
                 LEFT JOIN entrenadores e ON c.id_entrenador = e.id
                 LEFT JOIN inscripciones_clases ic ON c.id = ic.id_clase
                 WHERE c.dia_semana = ?
                 GROUP BY c.id
                 ORDER BY c.hora";
+                
         $stmt = $this->db->prepare($sql);
         $clases = [];
         if ($stmt) {
-            $stmt->bind_param("s", $dia_semana);
+            // Bindeamos los tres parámetros: id_usuario, id_usuario, dia_semana
+            $stmt->bind_param("iis", $id_usuario, $id_usuario, $dia_semana);
             $stmt->execute();
             $result = $stmt->get_result();
             while ($row = $result->fetch_assoc()) {

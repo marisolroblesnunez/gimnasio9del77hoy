@@ -27,9 +27,10 @@ switch ($resource) {
     case 'clases':
         if ($requestMethod == 'GET') {
             $controller = new ClaseController();
-            // Reutilizamos el método que ya estaba preparado para la API.
-            $clases = $controller->mostrarClases()['clases'];
-            echo json_encode($clases);
+            // La lógica para obtener las clases (incluyendo el user_id)
+            // ya está en el método mostrarClases(), así que simplemente lo llamamos.
+            $datosClases = $controller->mostrarClases();
+            echo json_encode($datosClases['clases']);
         } else {
             header("HTTP/1.1 405 Method Not Allowed");
             echo json_encode(['success' => false, 'message' => 'Método no permitido para el recurso clases.']);

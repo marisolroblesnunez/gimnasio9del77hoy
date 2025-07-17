@@ -74,12 +74,13 @@ $email_usuario = $_SESSION['usuario']['email'] ?? 'Usuario';
         }
         .clases-carrusel {
             display: flex;
-            overflow-x: auto; /* Habilita el scroll horizontal */
-            padding-bottom: 20px; /* Espacio para la barra de scroll */
-            gap: 20px; /* Espacio entre las tarjetas */
+            flex-wrap: wrap; /* Permite que las tarjetas se ajusten a la siguiente línea */
+            justify-content: center; /* Centra las tarjetas */
+            gap: 20px; /* Mantiene el espacio entre tarjetas */
         }
         .clase-card-reserva {
-            flex: 0 0 300px; /* No se encoge, no crece, base de 300px */
+            flex: 1 1 220px; /* Base de 220px, pueden crecer y encogerse */
+            max-width: 250px; /* Ancho máximo para evitar que se estiren demasiado */
             background-color: rgba(255, 255, 255, 0.05); /* Casi transparente */
             border: 1px solid #8A2BE2;
             border-radius: 10px;
@@ -142,29 +143,8 @@ $email_usuario = $_SESSION['usuario']['email'] ?? 'Usuario';
         
         <h2>No pierdas la oportunidad. ¡Apúntate YA!</h2>
 
-        <div class="clases-carrusel">
-            <?php if (empty($clases)): ?>
-                <p>No hay clases disponibles en este momento.</p>
-            <?php else:
-                foreach ($clases as $clase):
-            ?>
-                <div class="clase-card-reserva">
-                    <h3><?php echo htmlspecialchars($clase['nombre']); ?></h3>
-                    <p><strong>Entrenador:</strong> <?php echo htmlspecialchars($clase['nombre_entrenador'] ?? 'N/A'); ?></p>
-                    <p><strong>Día:</strong> <?php echo htmlspecialchars($clase['dia_semana']); ?></p>
-                    <p><strong>Hora:</strong> <?php echo htmlspecialchars(substr($clase['hora'], 0, 5)); ?> (<?php echo htmlspecialchars($clase['duracion_minutos']); ?> min)</p>
-                    <p><strong>Plazas reservadas:</strong> <?php echo htmlspecialchars($clase['inscritos_actuales']); ?> de <?php echo htmlspecialchars($clase['cupo_maximo']); ?></p>
-                    
-                    <?php if ($clase['inscritos_actuales'] >= $clase['cupo_maximo']): ?>
-                        <button class="reservar-btn lleno" disabled>Cupo Lleno</button>
-                    <?php else: ?>
-                        <button class="reservar-btn" data-clase-id="<?php echo $clase['id']; ?>">Reservar</button>
-                    <?php endif; ?>
-                </div>
-            <?php 
-                endforeach;
-            endif; 
-            ?>
+        <div id="clases-container" class="clases-carrusel">
+            <!-- Las clases se cargarán aquí dinámicamente con JavaScript -->
         </div>
         <div id="confetti-container"></div>
     </div>
